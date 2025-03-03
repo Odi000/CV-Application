@@ -2,35 +2,35 @@ function PersonalDetails() {
     return (
         <form onSubmit={e => e.preventDefault()}>
             <h1>Personal Details</h1>
-            <Inputs
+            <Input
                 id={"full-name"}
                 type={"text"}
                 title={"Full name"}
                 placeHolder={"First and last name"}
-            ></Inputs>
-            <Inputs
+            ></Input>
+            <Input
                 id={"email"}
                 type={"email"}
                 title={"Email"}
                 placeHolder={"Enter email"}
-            ></Inputs>
-            <Inputs
+            ></Input>
+            <Input
                 id={"phone-number"}
                 type={"tel"}
                 title={"Phone number"}
                 placeHolder={"Enter phone number"}
-            ></Inputs>
-            <Inputs
+            ></Input>
+            <Input
                 id={"address"}
                 type={"text"}
                 title={"Address"}
                 placeHolder={"City, Country"}
-            ></Inputs>
+            ></Input>
         </form>
     )
 }
 
-function Inputs({ id, type, title, placeHolder, recommended }) {
+export function Input({ id, type, title, placeHolder, recommended }) {
     return (
         <div className="input-group">
             <label htmlFor={id}>
