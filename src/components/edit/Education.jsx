@@ -1,6 +1,6 @@
 import { Input } from "./PersonalDetails";
-import studentCap from "../assets/graduation.png";
-import bin from "../assets/delete.svg";
+import studentCap from "../../assets/graduation.png";
+import bin from "../../assets/delete.svg";
 
 
 function Education() {

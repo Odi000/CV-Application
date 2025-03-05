@@ -1,4 +1,4 @@
-import bin from "../assets/delete.svg";
+import bin from "../../assets/delete.svg";
 
 function ClearAndLoad() {
     return (

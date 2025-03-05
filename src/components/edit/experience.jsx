@@ -1,5 +1,5 @@
-import briefcase from "../assets/briefcase.png";
-import bin from "../assets/delete.svg";
+import briefcase from "../../assets/briefcase.png";
+import bin from "../../assets/delete.svg";
 import { Input } from "./PersonalDetails";
 
 export default function Experience() {

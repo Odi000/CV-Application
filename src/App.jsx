@@ -1,18 +1,21 @@
 import './styles/App.css';
-import ClearAndLoad from './components/ClearAndLoad';
-import PersonalDetails from './components/PersonalDetails';
-import Education from './components/Education';
-import Experience from './components/experience';
+import ClearAndLoad from './components/edit/ClearAndLoad';
+import PersonalDetails from './components/edit/PersonalDetails';
+import Education from './components/edit/Education';
+import Experience from './components/edit/experience';
 
 function App() {
   return (
     <>
-      <div className="edit"></div>
+      <div className="edit">
       <ClearAndLoad></ClearAndLoad>
       <PersonalDetails></PersonalDetails>
       <Education></Education>
       <Experience></Experience>
-      <div className="preview"></div>
+      </div>
+      <div className="preview">
+
+      </div>
     </>
   )
 }
