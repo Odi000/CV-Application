@@ -1,32 +1,16 @@
-
-const genericData1 = {
-    key: crypto.randomUUID(),
-    startEndDate: "08/2020 – present",
-    location: "New York City, US",
-    company: "Umbrella Inc.",
-    position: "UX & UI Designer",
-    decription: "Designed and prototyped user interface patterns for various clients in various industries, ranging from self-service apps within the telecommunications-sector to mobile games for IOS and Android"
-}
-
-const genericData2 = {
-    key: crypto.randomUUID(),
-    startEndDate: "04/2018 – 02/2019",
-    location: "Berlin, Germany",
-    company: "Black Mesa Labs",
-    position: "UX Research Assistant",
-    decription: "Supported senior researchers on accessibility standards for the open web. Created and usability tested wireframes and prototypes. Produced interactive documentation for quick onboarding of new researchers."
-}
-
-function ExperienceSection({ experiences }) {
+export default function ExperienceSection({ experiences }) {
     return (
         <section>
-            <h1>Education</h1>
+            <h1>Professional Experience</h1>
             {experiences.map(experience => (
                 <ProExperience
                     key={experience.key}
-                    startEndDate={experience.startEndDate
-
-                    }></ProExperience>
+                    startEndDate={experience.startEndDate}
+                    location={experience.location}
+                    company={experience.company}
+                    position={experience.position}
+                    description={experience.decription}
+                ></ProExperience>
             ))}
         </section>
     )

@@ -1,25 +1,33 @@
-function EducationPreview(){
-    const genericData = {
-        startEndDate: "08/2020 – present",
-        location: "New York City, US",
-        school: "London City University",
-        degree: "Bachelors in Economics"
-    }
 
 
-    return(
+export default function EducationSection({ educations }) {
+    return (
         <section>
             <h1>Education</h1>
-            <div>
-                <div>
-                    <p>{genericData.startEndDate}</p>
-                    <p>{genericData.location}</p>
-                </div>
-                <div>
-                    <p>{genericData.school}</p>
-                    <p>{genericData.degree}</p>
-                </div>
-            </div>
+            {educations.map(education => (
+                <EducationInfo
+                    key={education.key}
+                    startEndDate={education.startEndDate}
+                    location={education.location}
+                    school={education.school}
+                    degree={education.degree}
+                ></EducationInfo>
+            ))}
         </section>
+    )
+}
+
+function EducationInfo({ startEndDate, location, school, degree }) {
+    return (
+        <div>
+            <div>
+                <p>{startEndDate}</p>
+                <p>{location}</p>
+            </div>
+            <div>
+                <p>{school}</p>
+                <p>{degree}</p>
+            </div>
+        </div>
     )
 }
