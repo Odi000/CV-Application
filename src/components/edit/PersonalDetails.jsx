@@ -1,6 +1,6 @@
 function PersonalDetails() {
     return (
-        <form onSubmit={e => e.preventDefault()}>
+        <form className="personal-details" onSubmit={e => e.preventDefault()}>
             <h1>Personal Details</h1>
             <Input
                 id={"full-name"}

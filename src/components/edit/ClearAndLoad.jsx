@@ -2,7 +2,7 @@ import bin from "../../assets/delete.svg";
 
 function ClearAndLoad() {
     return (
-        <div>
+        <div className="clear-n-load">
             <ClearResume></ClearResume>
             <LoadResume></LoadResume>
         </div>
