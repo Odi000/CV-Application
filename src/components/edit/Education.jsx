@@ -1,12 +1,19 @@
 import { Input } from "./PersonalDetails";
 import studentCap from "../../assets/graduation.png";
 import bin from "../../assets/delete.svg";
+import chevron from "../../assets/chevron.png"
 
 
 function Education() {
     return (
         <div className="education">
-            <h2><img src={studentCap} /> Education <span>⌄</span></h2>
+            <h2>
+                <div>
+                <img src={studentCap} /> 
+                <span>Education</span>
+                </div>
+                <img src={chevron}/>
+                </h2>
             <AddEducationBtn></AddEducationBtn>
             <AddEducationForm></AddEducationForm>
         </div>
@@ -14,7 +21,7 @@ function Education() {
 }
 
 function AddEducationBtn() {
-    return <button>+ Education</button>
+    return <button>+&nbsp;&nbsp;Education</button>
 }
 
 function AddEducationForm() {
@@ -53,11 +60,11 @@ function AddEducationForm() {
                 placeHolder={"Enter Location"}
             ></Input>
 
-            <div>
+            <div className="buttons">
                 <button className="delete"><img src={bin} />Delete</button>
                 <div>
                     <button>Cancel</button>
-                    <button>Save</button>
+                    <button className="save">Save</button>
                 </div>
             </div>
         </form>

@@ -13,12 +13,14 @@ function PersonalDetails() {
                 type={"email"}
                 title={"Email"}
                 placeHolder={"Enter email"}
+                recommended={true}
             ></Input>
             <Input
                 id={"phone-number"}
                 type={"tel"}
                 title={"Phone number"}
                 placeHolder={"Enter phone number"}
+                recommended={true}
             ></Input>
             <Input
                 id={"address"}

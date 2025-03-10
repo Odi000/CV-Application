@@ -3,7 +3,7 @@
 export default function EducationSection({ educations }) {
     return (
         <section>
-            <h1>Education</h1>
+            <h3>Education</h3>
             {educations.map(education => (
                 <EducationInfo
                     key={education.key}
@@ -25,7 +25,7 @@ function EducationInfo({ startEndDate, location, school, degree }) {
                 <p>{location}</p>
             </div>
             <div>
-                <p>{school}</p>
+                <p className="school">{school}</p>
                 <p>{degree}</p>
             </div>
         </div>

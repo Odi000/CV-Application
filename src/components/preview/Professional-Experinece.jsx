@@ -1,7 +1,7 @@
 export default function ExperienceSection({ experiences }) {
     return (
         <section>
-            <h1>Professional Experience</h1>
+            <h3>Professional Experience</h3>
             {experiences.map(experience => (
                 <ProExperience
                     key={experience.key}
@@ -24,7 +24,7 @@ function ProExperience({ startEndDate, location, company, position, description 
                 <p>{location}</p>
             </div>
             <div>
-                <p>{company}</p>
+                <p className="company">{company}</p>
                 <p>{position}</p>
                 <p>{description}</p>
             </div>

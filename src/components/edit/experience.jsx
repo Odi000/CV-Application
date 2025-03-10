@@ -1,12 +1,19 @@
+import { Input } from "./PersonalDetails";
 import briefcase from "../../assets/briefcase.png";
 import bin from "../../assets/delete.svg";
-import { Input } from "./PersonalDetails";
+import chevron from "../../assets/chevron.png"
 
 export default function Experience() {
     return (
         <div className="experience">
-            <h2><img src={briefcase} /> Experience<span>⌄</span></h2>
-            <button>+ Experience</button>
+            <h2>
+                <div>
+                <img src={briefcase} />
+                <span>Experience</span>
+                </div>
+                <img src={chevron} />
+            </h2>
+            <button>+&nbsp;&nbsp;Experience</button>
             <ExperienceFrom></ExperienceFrom>
         </div>
     )
@@ -47,11 +54,11 @@ function ExperienceFrom() {
                 title={"Location"}
                 placeHolder={"Enter Location"}
             ></Input>
-            <div>
+            <div className="buttons">
                 <button className="delete"><img src={bin} />Delete</button>
                 <div>
                     <button>Cancel</button>
-                    <button>Save</button>
+                    <button className="save">Save</button>
                 </div>
             </div>
         </form>
