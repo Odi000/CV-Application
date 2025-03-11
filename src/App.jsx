@@ -1,8 +1,9 @@
+import { useState } from "react";
 import './styles/App.css';
 import ClearAndLoad from './components/edit/ClearAndLoad';
 import PersonalDetails from './components/edit/PersonalDetails';
 import Education from './components/edit/Education';
-import Experience from './components/edit/experience';
+import Experience from './components/edit/Experience';
 import Header from './components/preview/Header';
 import EducationSection from './components/preview/Education-Preview';
 import ExperienceSection from './components/preview/Professional-Experinece';
@@ -15,6 +16,14 @@ const headerData = {
 };
 
 const eduData = {
+	key: crypto.randomUUID(),
+	startEndDate: "08/2020 – present",
+	location: "New York City, US",
+	school: "London City University",
+	degree: "Bachelors in Economics"
+};
+
+const eduData2 = {
 	key: crypto.randomUUID(),
 	startEndDate: "08/2020 – present",
 	location: "New York City, US",
@@ -43,26 +52,63 @@ const expData2 = {
 const experiences = [expData1, expData2];
 
 function App() {
+	//Personal Details state
+	const [fullName, setFullName] = useState(headerData.name);
+	const [email, setEmail] = useState(headerData.email);
+	const [phone, setPhone] = useState(headerData.phone);
+	const [address, setAddress] = useState(headerData.address);
+
+	//Education state
+	const [eduList, setEduList] = useState([eduData, eduData2]);
+
+	//Experience state
+	const [expList, setExpList] = useState(experiences);
+
+	//Change between Education and Experience
+	const [activeModule, setActiveModule] = useState(2);
+
+	function updateValue(e, hook) {
+		hook(e.target.value)
+	}
+
 	return (
 		<>
 			<div className="edit">
 				<ClearAndLoad></ClearAndLoad>
-				<PersonalDetails></PersonalDetails>
-				<Education></Education>
-				<Experience></Experience>
+				<PersonalDetails
+					fullName={fullName}
+					setFullName={setFullName}
+					email={email}
+					setEmail={setEmail}
+					phone={phone}
+					setPhone={setPhone}
+					address={address}
+					setAddress={setAddress}
+					updateValue={updateValue}
+				></PersonalDetails>
+				<Education
+					eduList={eduList}
+					activeModule={activeModule}
+					setActiveModule={setActiveModule}
+				></Education>
+				<Experience
+					expList={expList}
+					activeModule={activeModule}
+					setActiveModule={setActiveModule}
+				></Experience>
 			</div>
 			<div className="preview">
 				<Header
-					name={headerData.name}
-					email={headerData.email}
-					phone={headerData.phone}
-					address={headerData.address}
+					name={fullName}
+					email={email}
+					phone={phone}
+					address={address}
 				></Header>
 				<EducationSection
-					educations={[eduData]}
+					educations={eduList}
 				></EducationSection>
 				<ExperienceSection
-					experiences={experiences}
+					experiences={expList}
 				></ExperienceSection>
 			</div>
 		</>
