@@ -9,7 +9,7 @@ export default function ExperienceSection({ experiences }) {
                     location={experience.location}
                     company={experience.company}
                     position={experience.position}
-                    description={experience.decription}
+                    description={experience.description}
                 ></ProExperience>
             ))}
         </section>

@@ -73,4 +73,21 @@ export function Input({ id, type, title, placeHolder, recommended, value, update
     )
 }
 
+export function Textarea({ id, title, placeHolder, recommended, value, updateValue, hook }) {
+    return (
+        <div className="input-group">
+            <label htmlFor={id}>
+                <span>{title}</span>
+                <span>{recommended ? "recommended" : ""}</span>
+            </label>
+            <textarea
+                id={id}
+                placeholder={placeHolder}
+                value={value}
+                onChange={(e) => updateValue(e, hook)}
+            ></textarea>
+        </div>
+    )
+}
+
 export default PersonalDetails
