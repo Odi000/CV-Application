@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Input, Textarea } from "./PersonalDetails";
 import { JobRecord } from "../../App";
+import { formatDate } from "./functions";
 import briefcase from "../../assets/briefcase.png";
 import bin from "../../assets/delete.svg";
 import chevron from "../../assets/chevron.png"
@@ -10,7 +11,6 @@ export default function Experience({
     setExpList,
     activeModule,
     setActiveModule,
-    updateValue,
     company, setCompany,
     position, setPosition,
     expStartDate, setExpStartDate,
@@ -51,7 +51,6 @@ export default function Experience({
                 openForm={openForm}
                 isActive={isActive}
                 setOpenForm={setOpenForm}
-                updateValue={updateValue}
                 company={company}
                 setCompany={setCompany}
                 position={position}
@@ -89,7 +88,6 @@ function ExperienceFrom({
     openForm,
     isActive,
     setOpenForm,
-    updateValue,
     company, setCompany,
     position, setPosition,
     expStartDate, setExpStartDate,
@@ -109,7 +107,6 @@ function ExperienceFrom({
                 placeHolder={"Enter company name"}
                 value={company}
                 hook={setCompany}
-                updateValue={updateValue}
             ></Input>
             <Input
                 id={"position-title"}
@@ -118,7 +115,6 @@ function ExperienceFrom({
                 placeHolder={"Enter position title"}
                 value={position}
                 hook={setPosition}
-                updateValue={updateValue}
             ></Input>
             <div className="dates">
                 <Input
@@ -128,7 +124,7 @@ function ExperienceFrom({
                     placeHolder={"Enter start date"}
                     value={expStartDate}
                     hook={setExpStartDate}
-                    updateValue={updateValue}
+
                 ></Input>
                 <Input
                     id={"end-date1"}
@@ -137,7 +133,7 @@ function ExperienceFrom({
                     placeHolder={"Enter end date"}
                     value={expEndDate}
                     hook={setExpEndDate}
-                    updateValue={updateValue}
+
                 ></Input>
             </div>
             <Input
@@ -147,7 +143,6 @@ function ExperienceFrom({
                 placeHolder={"Enter Location"}
                 value={expLocation}
                 hook={setExpLocation}
-                updateValue={updateValue}
             ></Input>
             <Textarea
                 id={"description"}
@@ -155,7 +150,6 @@ function ExperienceFrom({
                 title={"Description"}
                 value={expDescription}
                 hook={setExpDescription}
-                updateValue={updateValue}
             ></Textarea>
             <div className="buttons">
                 <button className="delete"><img src={bin} />Delete</button>
@@ -176,8 +170,8 @@ function ExperienceFrom({
                                 company,
                                 position,
                                 expLocation,
-                                expStartDate,
-                                expEndDate,
+                                formatDate(expStartDate),
+                                formatDate(expEndDate, true),
                                 expDescription
                             )
 

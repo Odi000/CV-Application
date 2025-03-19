@@ -1,3 +1,5 @@
+import { updateValue } from "./functions"
+
 
 function PersonalDetails({
     fullName,
@@ -8,7 +10,6 @@ function PersonalDetails({
     setPhone,
     address,
     setAddress,
-    updateValue
 }) {
     return (
         <form className="personal-details" onSubmit={e => e.preventDefault()}>
@@ -19,7 +20,6 @@ function PersonalDetails({
                 title={"Full name"}
                 placeHolder={"First and last name"}
                 value={fullName}
-                updateValue={updateValue}
                 hook={setFullName}
             ></Input>
             <Input
@@ -29,7 +29,6 @@ function PersonalDetails({
                 placeHolder={"Enter email"}
                 recommended={true}
                 value={email}
-                updateValue={updateValue}
                 hook={setEmail}
             ></Input>
             <Input
@@ -39,7 +38,6 @@ function PersonalDetails({
                 placeHolder={"Enter phone number"}
                 recommended={true}
                 value={phone}
-                updateValue={updateValue}
                 hook={setPhone}
             ></Input>
             <Input
@@ -48,14 +46,13 @@ function PersonalDetails({
                 title={"Address"}
                 placeHolder={"City, Country"}
                 value={address}
-                updateValue={updateValue}
                 hook={setAddress}
             ></Input>
         </form>
     )
 }
 
-export function Input({ id, type, title, placeHolder, recommended, value, updateValue, hook }) {
+export function Input({ id, type, title, placeHolder, recommended, value, hook, openForm }) {
     return (
         <div className="input-group">
             <label htmlFor={id}>
@@ -73,7 +70,7 @@ export function Input({ id, type, title, placeHolder, recommended, value, update
     )
 }
 
-export function Textarea({ id, title, placeHolder, recommended, value, updateValue, hook }) {
+export function Textarea({ id, title, placeHolder, recommended, value, hook }) {
     return (
         <div className="input-group">
             <label htmlFor={id}>

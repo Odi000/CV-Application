@@ -49,7 +49,7 @@ const eduData2 = new EduRecord(
 	"Bachelors in Economics",
 	"New York City, US",
 	"08/2020",
-	"present",
+	"10/2023",
 );
 
 const expData1 = new JobRecord(
@@ -99,10 +99,6 @@ function App() {
 	//Change between Education and Experience
 	const [activeModule, setActiveModule] = useState(2);
 
-	function updateValue(e, hook) {
-		hook(e.target.value)
-	}
-
 	return (
 		<>
 			<div className="edit">
@@ -116,12 +112,10 @@ function App() {
 					setPhone={setPhone}
 					address={address}
 					setAddress={setAddress}
-					updateValue={updateValue}
 				></PersonalDetails>
 				<Education
 					activeModule={activeModule}
 					setActiveModule={setActiveModule}
-					updateValue={updateValue}
 					eduList={eduList}
 					setEduList={setEduList}
 					school={school}
@@ -138,7 +132,6 @@ function App() {
 				<Experience
 					activeModule={activeModule}
 					setActiveModule={setActiveModule}
-					updateValue={updateValue}
 					expList={expList}
 					setExpList={setExpList}
 					company={company}

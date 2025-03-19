@@ -1,38 +1,45 @@
 import { useState } from "react";
 import { Input } from "./PersonalDetails";
+import { EduRecord } from "../../App";
+import { formatDate, cancelForm, editMode } from "./functions";
 import studentCap from "../../assets/graduation.png";
 import bin from "../../assets/delete.svg";
 import chevron from "../../assets/chevron.png";
-import { EduRecord } from "../../App";
 
 
 function Education({
     eduList,
     activeModule,
     setActiveModule,
-    updateValue,
     setEduList,
     school,
-    setSchool,
     degree,
-    setDegree,
     startDate,
-    setStartDate,
     endDate,
-    setEndDate,
     location,
+    setSchool,
+    setDegree,
+    setStartDate,
+    setEndDate,
     setLocation
 }) {
-    const [openForm, setOpenForm] = useState(false);
+    const [openForm, setOpenForm] = useState({ isIt: false, education: undefined });
     const isActive = activeModule === 0;
+    const eduHooks = {
+        setSchool,
+        setDegree,
+        setStartDate,
+        setEndDate,
+        setLocation
+    }
 
     return (
         <div className="education">
             <h2
                 onClick={() => {
                     isActive ?
-                        (setActiveModule(2), setOpenForm(false)) :
-                        (setActiveModule(0), setOpenForm(false));
+                        (setActiveModule(2), setOpenForm({ isIt: false, education: undefined })) :
+                        (setActiveModule(0), setOpenForm({ isIt: false, education: undefined }));
                 }}
             >
                 <div>
@@ -49,12 +56,12 @@ function Education({
                 isActive={isActive}
                 isFormOpen={openForm}
                 setOpenForm={setOpenForm}
+                eduHooks={eduHooks}
             ></EducationMenu>
             <AddEducationForm
                 openForm={openForm}
-                isActive={isActive}
                 setOpenForm={setOpenForm}
-                updateValue={updateValue}
+                isActive={isActive}
                 eduList={eduList}
                 setEduList={setEduList}
                 school={school}
@@ -72,25 +79,67 @@ function Education({
     )
 }
 
-function EducationMenu({ isActive, eduList, isFormOpen, setOpenForm }) {
+
+
+function EducationMenu({ isActive, eduList, isFormOpen, setOpenForm, eduHooks }) {
     return (
-        <div className={isActive && !isFormOpen ? "list visible" : "list"}>
+        <div className={isActive && !isFormOpen.isIt ? "list visible" : "list"}>
             <ul>
                 {eduList.map(education => {
-                    return <li key={education.key}>{education.school}</li>
+                    // return <li key={education.key}>{education.school}</li>
+                    return <ListItem
+                        key={education.key}
+                        eduList={eduList}
+                        education={education}
+                        content={education.school}
+                        setOpenForm={setOpenForm}
+                        eduHooks={eduHooks}
+                    ></ListItem>
                 })}
             </ul>
-            <button onClick={() => setOpenForm(true)}>+&nbsp;&nbsp;Education</button>
+            <button onClick={() => setOpenForm({ isIt: true, education: undefined })}>+&nbsp;&nbsp;Education</button>
         </div>
+    )
+}
+
+function ListItem({ setOpenForm, education, content, eduHooks }) {
+    return (
+        <li
+            onClick={() => {
+                editMode(setOpenForm,education,eduHooks);
+                // const fullDate = education.startEndDate.split(" – ");
+                // let stDate = fullDate[0].split("/");
+                // let enDate = fullDate[1].split("/");
+
+                // if (enDate[0] === "present") {
+                //     const currentDate = new Date().toISOString().split("T")[0];
+                //     enDate = currentDate;
+                // } else {
+                //     enDate.splice(1, 0, "02");
+                //     enDate = enDate.join("-");
+                //     enDate = new Date(enDate).toISOString().split("T")[0]
+                // }
+
+                // stDate.splice(1, 0, "02");
+                // stDate = stDate.join("-");
+                // stDate = new Date(stDate).toISOString().split("T")[0]
+
+                // eduHooks.setSchool(education.school);
+                // eduHooks.setDegree(education.degree);
+                // eduHooks.setStartDate(stDate);
+                // eduHooks.setEndDate(enDate);
+                // eduHooks.setLocation(education.location);
+                // setOpenForm({ isIt: true, education });
+            }}
+        >{content}</li>
     )
 }
 
 function AddEducationForm({
     openForm,
-    isActive,
     setOpenForm,
+    isActive,
     eduList,
-    updateValue,
     setEduList,
     school,
     setSchool,
@@ -105,7 +154,7 @@ function AddEducationForm({
 }) {
     return (
         <form
-            className={openForm && isActive ? "show" : undefined}
+            className={openForm.isIt && isActive ? "show" : undefined}
             onSubmit={e => e.preventDefault()}
         >
             <Input
@@ -115,7 +164,6 @@ function AddEducationForm({
                 placeHolder={"Enter school / University"}
                 value={school}
                 hook={setSchool}
-                updateValue={updateValue}
             ></Input>
             <Input
                 id={"degree"}
@@ -124,7 +172,6 @@ function AddEducationForm({
                 placeHolder={"Enter degree / Field of study"}
                 value={degree}
                 hook={setDegree}
-                updateValue={updateValue}
             ></Input>
             <div className="dates">
                 <Input
@@ -134,7 +181,6 @@ function AddEducationForm({
                     placeHolder={"Enter start date"}
                     value={startDate}
                     hook={setStartDate}
-                    updateValue={updateValue}
                 ></Input>
                 <Input
                     id={"end-date"}
@@ -143,7 +189,6 @@ function AddEducationForm({
                     placeHolder={"Enter end date"}
                     value={endDate}
                     hook={setEndDate}
-                    updateValue={updateValue}
                 ></Input>
             </div>
             <Input
@@ -153,29 +198,35 @@ function AddEducationForm({
                 placeHolder={"Enter Location"}
                 value={location}
                 hook={setLocation}
-                updateValue={updateValue}
             ></Input>
-
             <div className="buttons">
                 <button className="delete"><img src={bin} />Delete</button>
                 <div>
                     <button onClick={() => {
-                        setSchool("");
-                        setDegree("");
-                        setStartDate("");
-                        setEndDate("");
-                        setLocation("");
-                        setOpenForm(false)
+                        cancelForm({
+                            setSchool,
+                            setDegree,
+                            setStartDate,
+                            setEndDate,
+                            setLocation,
+                            setOpenForm
+                        }, "education");
                     }}>Cancel</button>
                     <button
                         className="save"
                         onClick={() => {
+                            const formatedStDate = formatDate(startDate)
+                            const formatedEnDate = formatDate(endDate, true)
+
+                            if (!formatedStDate || !formatedEnDate) {
+                                return alert("Date is required!")
+                            }
                             const newEdu = new EduRecord(
                                 school,
                                 degree,
                                 location,
-                                startDate,
-                                endDate,
+                                formatedStDate,
+                                formatedEnDate,
                             )
 
                             setEduList([...eduList, newEdu]);
