@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Input } from "./PersonalDetails";
 import { EduRecord } from "../../App";
-import { formatDate, cancelForm, editMode } from "./functions";
+import { formatDate, cancelForm, editSelected } from "./functions";
 import studentCap from "../../assets/graduation.png";
 import bin from "../../assets/delete.svg";
 import chevron from "../../assets/chevron.png";
@@ -106,30 +106,7 @@ function ListItem({ setOpenForm, education, content, eduHooks }) {
     return (
         <li
             onClick={() => {
-                editMode(setOpenForm,education,eduHooks);
-                // const fullDate = education.startEndDate.split(" – ");
-                // let stDate = fullDate[0].split("/");
-                // let enDate = fullDate[1].split("/");
-
-                // if (enDate[0] === "present") {
-                //     const currentDate = new Date().toISOString().split("T")[0];
-                //     enDate = currentDate;
-                // } else {
-                //     enDate.splice(1, 0, "02");
-                //     enDate = enDate.join("-");
-                //     enDate = new Date(enDate).toISOString().split("T")[0]
-                // }
-
-                // stDate.splice(1, 0, "02");
-                // stDate = stDate.join("-");
-                // stDate = new Date(stDate).toISOString().split("T")[0]
-
-                // eduHooks.setSchool(education.school);
-                // eduHooks.setDegree(education.degree);
-                // eduHooks.setStartDate(stDate);
-                // eduHooks.setEndDate(enDate);
-                // eduHooks.setLocation(education.location);
-                // setOpenForm({ isIt: true, education });
+                editSelected(setOpenForm, education, eduHooks);
             }}
         >{content}</li>
     )
@@ -200,10 +177,27 @@ function AddEducationForm({
                 hook={setLocation}
             ></Input>
             <div className="buttons">
-                <button className="delete"><img src={bin} />Delete</button>
+                <button
+                    className="delete"
+                    onClick={() => {
+                        if (openForm.education) {
+                            const index = eduList.findIndex((el) => el.key === openForm.education.key);
+                            eduList.splice(index, 1);
+                            setEduList([...eduList]);
+                        }
+                        cancelForm({
+                            setSchool,
+                            setDegree,
+                            setStartDate,
+                            setEndDate,
+                            setLocation,
+                            setOpenForm
+                        }, "education");
+                    }}
+                ><img src={bin} />Delete</button>
                 <div>
                     <button onClick={() => {
-                        cancelForm({
+                         cancelForm({
                             setSchool,
                             setDegree,
                             setStartDate,
@@ -215,21 +209,50 @@ function AddEducationForm({
                     <button
                         className="save"
                         onClick={() => {
-                            const formatedStDate = formatDate(startDate)
-                            const formatedEnDate = formatDate(endDate, true)
+                            const formatedStDate = formatDate(startDate);
+                            const formatedEnDate = formatDate(endDate, true);
 
                             if (!formatedStDate || !formatedEnDate) {
                                 return alert("Date is required!")
-                            }
-                            const newEdu = new EduRecord(
-                                school,
-                                degree,
-                                location,
-                                formatedStDate,
-                                formatedEnDate,
-                            )
+                            } else if (openForm.education) {
+                                const existingEl = eduList.find((el) => el.key === openForm.education.key);
+                                existingEl.school = school;
+                                existingEl.degree = degree;
+                                existingEl.location = location;
+                                existingEl.startEndDate = `${formatedStDate} – ${formatedEnDate}`;
+                                setEduList([...eduList]);
 
-                            setEduList([...eduList, newEdu]);
+                                //Close form after edit
+                                cancelForm({
+                                    setSchool,
+                                    setDegree,
+                                    setStartDate,
+                                    setEndDate,
+                                    setLocation,
+                                    setOpenForm
+                                }, "education");
+
+                            } else {
+                                const newEl = new EduRecord(
+                                    school,
+                                    degree,
+                                    location,
+                                    formatedStDate,
+                                    formatedEnDate,
+                                )
+                                setEduList([...eduList, newEl]);
+
+                                //Close form after save
+                                cancelForm({
+                                    setSchool,
+                                    setDegree,
+                                    setStartDate,
+                                    setEndDate,
+                                    setLocation,
+                                    setOpenForm
+                                }, "education");
+
+                            }
                         }}
                     >Save</button>
                 </div>

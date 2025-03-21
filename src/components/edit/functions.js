@@ -31,7 +31,7 @@ export function cancelForm(hooks, form) {
     }
 }
 
-export function editMode(setOpenForm, education, eduHooks){
+export function editSelected(setOpenForm, education, eduHooks){
     const fullDate = education.startEndDate.split(" – ");
     let stDate = fullDate[0].split("/");
     let enDate = fullDate[1].split("/");
@@ -55,4 +55,8 @@ export function editMode(setOpenForm, education, eduHooks){
     eduHooks.setEndDate(enDate);
     eduHooks.setLocation(education.location);
     setOpenForm({ isIt: true, education });
+}
+
+export function deleteBtn(){
+    
 }
