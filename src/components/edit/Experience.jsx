@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Input, Textarea } from "./PersonalDetails";
 import { JobRecord } from "../../App";
 import { formatDate } from "./functions";
+import { ListItem } from "./Education";
 import briefcase from "../../assets/briefcase.png";
 import bin from "../../assets/delete.svg";
 import chevron from "../../assets/chevron.png"
@@ -18,16 +19,24 @@ export default function Experience({
     expLocation, setExpLocation,
     expDescription, setExpDescription
 }) {
-    const [openForm, setOpenForm] = useState(false);
+    const [openForm, setOpenForm] = useState({ isIt: false, education: undefined });
     const isActive = activeModule === 1;
+    const expHooks = {
+        setCompany,
+        setPosition,
+        setExpStartDate,
+        setExpEndDate,
+        setExpLocation,
+        setExpDescription
+    }
 
     return (
         <div className="experience">
             <h2
                 onClick={() => {
                     isActive ?
-                        (setActiveModule(2), setOpenForm(false)) :
-                        (setActiveModule(1), setOpenForm(false));
+                        (setActiveModule(2), setOpenForm({ isIt: false, education: undefined })) :
+                        (setActiveModule(1), setOpenForm({ isIt: false, education: undefined }));
                 }}
             >
                 <div>
@@ -40,10 +49,11 @@ export default function Experience({
                 />
             </h2>
             <ExperienceMenu
-                isActive={isActive}
                 expList={expList}
+                isActive={isActive}
                 isFormOpen={openForm}
                 setOpenForm={setOpenForm}
+                expHooks={expHooks}
             ></ExperienceMenu>
             <ExperienceFrom
                 expList={expList}
@@ -68,15 +78,25 @@ export default function Experience({
     )
 }
 
-function ExperienceMenu({ isActive, expList, isFormOpen, setOpenForm }) {
+function ExperienceMenu({ isActive, expList, isFormOpen, setOpenForm, expHooks }) {
     return (
-        <div className={isActive && !isFormOpen ? "list visible" : "list"}>
+        <div className={isActive && !isFormOpen.isIt ? "list visible" : "list"}>
             <ul>
                 {expList.map(experience => {
-                    return <li key={experience.key}>{experience.company}</li>
+                    return (
+                        <ListItem
+                            key={experience.key}
+                            listElement={experience}
+                            content={experience.company}
+                            setOpenForm={setOpenForm}
+                            hooks={expHooks}
+                            form={"experience"}
+                        ></ListItem>
+                    )
+                    // return <li key={experience.key}>{experience.company}</li>
                 })}
             </ul>
-            <button onClick={() => setOpenForm(true)}>+&nbsp;&nbsp;Experience</button>
+            <button onClick={() => setOpenForm({ isIt: true, education: undefined })}>+&nbsp;&nbsp;Experience</button>
         </div>
 
     )
@@ -97,7 +117,7 @@ function ExperienceFrom({
 }) {
     return (
         <form
-            className={openForm && isActive ? "show" : undefined}
+            className={openForm.isIt && isActive ? "show" : undefined}
             onSubmit={e => e.preventDefault()}
         >
             <Input

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Input } from "./PersonalDetails";
 import { EduRecord } from "../../App";
-import { formatDate, cancelForm, editSelected } from "./functions";
+import { formatDate, cancelForm, editSelected, deleteBtn, saveBtn } from "./functions";
 import studentCap from "../../assets/graduation.png";
 import bin from "../../assets/delete.svg";
 import chevron from "../../assets/chevron.png";
@@ -86,14 +86,13 @@ function EducationMenu({ isActive, eduList, isFormOpen, setOpenForm, eduHooks })
         <div className={isActive && !isFormOpen.isIt ? "list visible" : "list"}>
             <ul>
                 {eduList.map(education => {
-                    // return <li key={education.key}>{education.school}</li>
                     return <ListItem
                         key={education.key}
-                        eduList={eduList}
-                        education={education}
+                        listElement={education}
                         content={education.school}
                         setOpenForm={setOpenForm}
-                        eduHooks={eduHooks}
+                        hooks={eduHooks}
+                        form={"education"}
                     ></ListItem>
                 })}
             </ul>
@@ -102,11 +101,11 @@ function EducationMenu({ isActive, eduList, isFormOpen, setOpenForm, eduHooks })
     )
 }
 
-function ListItem({ setOpenForm, education, content, eduHooks }) {
+export function ListItem({ setOpenForm, listElement, content, hooks, form }) {
     return (
         <li
             onClick={() => {
-                editSelected(setOpenForm, education, eduHooks);
+                editSelected(setOpenForm, listElement, hooks, form);
             }}
         >{content}</li>
     )
@@ -180,24 +179,23 @@ function AddEducationForm({
                 <button
                     className="delete"
                     onClick={() => {
-                        if (openForm.education) {
-                            const index = eduList.findIndex((el) => el.key === openForm.education.key);
-                            eduList.splice(index, 1);
-                            setEduList([...eduList]);
-                        }
-                        cancelForm({
-                            setSchool,
-                            setDegree,
-                            setStartDate,
-                            setEndDate,
-                            setLocation,
-                            setOpenForm
-                        }, "education");
+                        deleteBtn(
+                            openForm,
+                            eduList,
+                            {
+                                setSchool,
+                                setDegree,
+                                setStartDate,
+                                setEndDate,
+                                setLocation,
+                                setOpenForm,
+                                setEduList
+                            }, "education")
                     }}
                 ><img src={bin} />Delete</button>
                 <div>
                     <button onClick={() => {
-                         cancelForm({
+                        cancelForm({
                             setSchool,
                             setDegree,
                             setStartDate,
@@ -209,50 +207,26 @@ function AddEducationForm({
                     <button
                         className="save"
                         onClick={() => {
-                            const formatedStDate = formatDate(startDate);
-                            const formatedEnDate = formatDate(endDate, true);
-
-                            if (!formatedStDate || !formatedEnDate) {
-                                return alert("Date is required!")
-                            } else if (openForm.education) {
-                                const existingEl = eduList.find((el) => el.key === openForm.education.key);
-                                existingEl.school = school;
-                                existingEl.degree = degree;
-                                existingEl.location = location;
-                                existingEl.startEndDate = `${formatedStDate} – ${formatedEnDate}`;
-                                setEduList([...eduList]);
-
-                                //Close form after edit
-                                cancelForm({
-                                    setSchool,
-                                    setDegree,
-                                    setStartDate,
-                                    setEndDate,
-                                    setLocation,
-                                    setOpenForm
-                                }, "education");
-
-                            } else {
-                                const newEl = new EduRecord(
+                            saveBtn(
+                                openForm,
+                                eduList,
+                                {
                                     school,
                                     degree,
                                     location,
-                                    formatedStDate,
-                                    formatedEnDate,
-                                )
-                                setEduList([...eduList, newEl]);
-
-                                //Close form after save
-                                cancelForm({
+                                    startDate,
+                                    endDate,
+                                },
+                                {
                                     setSchool,
                                     setDegree,
                                     setStartDate,
                                     setEndDate,
                                     setLocation,
-                                    setOpenForm
-                                }, "education");
-
-                            }
+                                    setOpenForm,
+                                    setEduList
+                                }, "education"
+                            )
                         }}
                     >Save</button>
                 </div>
