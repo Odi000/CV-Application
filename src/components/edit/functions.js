@@ -1,4 +1,4 @@
-import { EduRecord } from "../../App";
+import { EduRecord, JobRecord } from "./exampleData";
 
 export function updateValue(e, hook) {
     hook(e.target.value)
@@ -28,7 +28,8 @@ export function cancelForm(hooks, form) {
         if (key === "setOpenForm") {
             hooks[key]({ isIt: false, [form]: undefined });
             continue;
-        }
+        } else if (key === "setEduList" || key === "setExpList") continue;
+
         hooks[key]("")
     }
 }
@@ -51,11 +52,6 @@ export function editSelected(setOpenForm, selectedEl, hooks, form) {
     stDate = stDate.join("-");
     stDate = new Date(stDate).toISOString().split("T")[0];
 
-    // for(let key in hooks) {
-    //     console.log(key)
-    // }
-    console.log(selectedEl)
-
     if (form === "education") {
         hooks.setSchool(selectedEl.school);
         hooks.setDegree(selectedEl.degree);
@@ -74,84 +70,69 @@ export function editSelected(setOpenForm, selectedEl, hooks, form) {
 }
 
 export function deleteBtn(openForm, list, hooks, form) {
-    if (form === "education") {
-        if (openForm.education) {
-            const index = list.findIndex((el) => el.key === openForm.education.key);
-            list.splice(index, 1);
-            hooks.setEduList([...list]);
-        }
-        cancelForm({
-            setSchool: hooks.setSchool,
-            setDegree: hooks.setDegree,
-            setStartDate: hooks.setStartDate,
-            setEndDate: hooks.setEndDate,
-            setLocation: hooks.setLocation,
-            setOpenForm: hooks.setOpenForm
-        }, form);
-    } else {
-        if (openForm.experience) {
-            const index = list.findIndex((el) => el.key === openForm.experience.key);
-            list.splice(index, 1);
-            hooks.setExpList([...list]);
-        }
-        //Ndrroj hooksat me perkatset ne exp
-        cancelForm({
-            setSchool: hooks.setSchool,
-            setDegree: hooks.setDegree,
-            setStartDate: hooks.setStartDate,
-            setEndDate: hooks.setEndDate,
-            setLocation: hooks.setLocation,
-            setOpenForm: hooks.setOpenForm
-        }, form);
 
+    if (openForm[form]) {
+        const index = list.findIndex((el) => el.key === openForm[form].key);
+        list.splice(index, 1);
+        form === "education" ? hooks.setEduList([...list]) : hooks.setExpList([...list]);
     }
+    cancelForm({ ...hooks }, form);
 }
 
 
 //Bane si ky funksioni te veprojne edhe per modulin e eksperiences
 //Mrapa vazhdo me butonat si kan met
-export function saveBtn(openForm, eduList, inputs, hooks, form) {
-    console.log(inputs)
-    const formatedStDate = formatDate(inputs.startDate);
-    const formatedEnDate = formatDate(inputs.endDate, true);
+export function saveBtn(openForm, list, inputs, hooks, form) {
+    const formatedStDate = formatDate(inputs.startDate ? inputs.startDate : inputs.expStartDate);
+    const formatedEnDate = formatDate(inputs.endDate ? inputs.endDate : inputs.expEndDate, true);
 
     if (!formatedStDate || !formatedEnDate) {
         return alert("Date is required!")
-    } else if (openForm.education) {
-        const existingEl = eduList.find((el) => el.key === openForm.education.key);
-        existingEl.school = inputs.school;
-        existingEl.degree = inputs.degree;
-        existingEl.location = inputs.location;
+    } else if (openForm[form]) {
+        const existingEl = list.find((el) => el.key === openForm[form].key);
+
+        for (const key in inputs) {
+            if (
+                key == "startDate" ||
+                key == "endDate" ||
+                key == "expStartDate" ||
+                key == "expEndDate"
+            ) {
+                continue;
+            } else if (key == "expDescription") {
+                existingEl.description = inputs[key];
+            } else if (key == "expLocation") {
+                existingEl.location = inputs[key];
+            }
+            existingEl[key] = inputs[key];
+        }
         existingEl.startEndDate = `${formatedStDate} – ${formatedEnDate}`;
-        hooks.setEduList([...eduList]);
+
+        form == "education" ? hooks.setEduList([...list]) : hooks.setExpList([...list]);
 
         //Close form after edit
-        cancelForm({
-            setSchool: hooks.setSchool,
-            setDegree: hooks.setDegree,
-            setStartDate: hooks.setStartDate,
-            setEndDate: hooks.setEndDate,
-            setLocation: hooks.setLocation,
-            setOpenForm: hooks.setOpenForm
-        }, form);
+        cancelForm({ ...hooks }, form);
     } else {
-        const newEl = new EduRecord(
-            inputs.school,
-            inputs.degree,
-            inputs.location,
-            formatedStDate,
-            formatedEnDate,
-        )
-        hooks.setEduList([...eduList, newEl]);
-
-        //Close form after save
-        cancelForm({
-            setSchool: hooks.setSchool,
-            setDegree: hooks.setDegree,
-            setStartDate: hooks.setStartDate,
-            setEndDate: hooks.setEndDate,
-            setLocation: hooks.setLocation,
-            setOpenForm: hooks.setOpenForm
-        }, form);
+        if (form == "education") {
+            const newEl = new EduRecord(
+                inputs.school,
+                inputs.degree,
+                inputs.location,
+                formatedStDate,
+                formatedEnDate,
+            )
+            hooks.setEduList([...list, newEl]);
+        } else {
+            const newEl = new JobRecord(
+                inputs.company,
+                inputs.position,
+                inputs.location,
+                formatedStDate,
+                formatedEnDate,
+                inputs.description
+            )
+            hooks.setEduList([...list, newEl]);
+        }
+        cancelForm({ ...hooks }, form);
     }
 }

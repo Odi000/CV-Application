@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Input } from "./PersonalDetails";
-import { EduRecord } from "../../App";
 import { formatDate, cancelForm, editSelected, deleteBtn, saveBtn } from "./functions";
 import studentCap from "../../assets/graduation.png";
 import bin from "../../assets/delete.svg";
@@ -190,7 +189,8 @@ function AddEducationForm({
                                 setLocation,
                                 setOpenForm,
                                 setEduList
-                            }, "education")
+                            },
+                            "education")
                     }}
                 ><img src={bin} />Delete</button>
                 <div>

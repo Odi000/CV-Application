@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Input, Textarea } from "./PersonalDetails";
-import { JobRecord } from "../../App";
-import { formatDate } from "./functions";
+import { cancelForm, deleteBtn, formatDate, saveBtn } from "./functions";
 import { ListItem } from "./Education";
 import briefcase from "../../assets/briefcase.png";
 import bin from "../../assets/delete.svg";
@@ -172,30 +171,67 @@ function ExperienceFrom({
                 hook={setExpDescription}
             ></Textarea>
             <div className="buttons">
-                <button className="delete"><img src={bin} />Delete</button>
+                <button
+                    className="delete"
+                    onClick={() => {
+                        deleteBtn(
+                            openForm,
+                            expList,
+                            {
+                                setCompany,
+                                setPosition,
+                                setExpStartDate,
+                                setExpEndDate,
+                                setExpLocation,
+                                setExpDescription,
+                                setOpenForm,
+                                setExpList
+                            },
+                            "experience"
+
+                        )
+                    }}
+                ><img src={bin} />Delete</button>
                 <div>
                     <button onClick={() => {
-                        setCompany("");
-                        setPosition("");
-                        setExpStartDate("");
-                        setExpEndDate("");
-                        setExpLocation("");
-                        setExpDescription("");
-                        setOpenForm(false);
+                        cancelForm(
+                            {
+                                setCompany,
+                                setPosition,
+                                setExpStartDate,
+                                setExpEndDate,
+                                setExpLocation,
+                                setExpDescription,
+                                setOpenForm,
+                            },
+                            "experience"
+                        )
                     }}>Cancel</button>
                     <button
                         className="save"
                         onClick={() => {
-                            const newExp = new JobRecord(
-                                company,
-                                position,
-                                expLocation,
-                                formatDate(expStartDate),
-                                formatDate(expEndDate, true),
-                                expDescription
+                            saveBtn(
+                                openForm,
+                                expList,
+                                {
+                                    company,
+                                    position,
+                                    expLocation,
+                                    expStartDate,
+                                    expEndDate,
+                                    expDescription
+                                },
+                                {
+                                    setCompany,
+                                    setPosition,
+                                    setExpLocation,
+                                    setExpStartDate,
+                                    setExpEndDate,
+                                    setExpDescription,
+                                    setOpenForm,
+                                    setExpList
+                                }, "experience"
                             )
-
-                            setExpList([...expList, newExp]);
                         }}
                     >Save</button>
                 </div>
